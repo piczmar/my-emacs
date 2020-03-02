@@ -8,7 +8,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (counsel swiper ace-window org-bullets try which-key use-package))))
+    (auto-complete counsel swiper ace-window org-bullets try which-key use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -99,3 +99,11 @@
 (use-package avy
   :ensure t
   :bind ("M-s" . avy-goto-char-2))
+
+
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t)))
