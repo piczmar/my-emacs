@@ -1,0 +1,20 @@
+#+STARTUP: showall
+
+* Lesson 1
+** part 1
+Introducing the series
+  - Show melpa
+** Part 2
+  - set melpa
+
+* Lesson 2
+  Shouw some org-mode
+  - review init.el
+  - set Reame.org
+
+* Links
+  - [[http://github.com][This is my blog]]
+  
+* Another paragraph
+** sub-paragraph
+*** Yet another
