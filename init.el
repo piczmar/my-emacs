@@ -1,5 +1,19 @@
 
-
+;; auto generated
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (expand-region beacon undo-tree elpy flycheck zenburn-theme which-key use-package try org-bullets counsel color-theme-modern color-theme auto-complete ace-window))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
 ;; Our stuff
 
@@ -54,6 +68,7 @@
     ))
 
 (use-package counsel
+  
   :ensure t
   )
 
@@ -101,4 +116,46 @@
 ;;   ;;  :config (load-theme 'zenburn t))
 ;;   ;;  :config (load-theme 'subtle-hacker t))
 ;;   :config (load-theme 'emacs-21 t))
+
+;; flycheck
+
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+
+
+;; python
+(use-package elpy
+  :ensure t
+  :config
+  (elpy-enable))
+
+;; yasnippet
+(use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1))
+
+
+;; undo tree
+
+(use-package undo-tree
+  :ensure t
+  :init
+  (global-undo-tree-mode))
+
+
+;; misceleneaous
+(global-hl-line-mode t)
+
+;; (use-package beacon
+;;   :ensure t
+;;   :config
+;;   (beacon-mode 1))
+
+(use-package expand-region
+  :ensure t
+  :config
+  (global-set-key (kbd "C-=") 'er/expand-region))
 
