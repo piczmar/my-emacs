@@ -15,7 +15,7 @@
  '(org-startup-indented t)
  '(package-selected-packages
    (quote
-    (htmlize noflet web-mode iedit ideit expand-region beacon undo-tree elpy flycheck zenburn-theme which-key use-package try org-bullets counsel color-theme-modern color-theme auto-complete ace-window))))
+    (dumb-jump projectile smartparens htmlize noflet web-mode iedit ideit expand-region beacon undo-tree elpy flycheck zenburn-theme which-key use-package try org-bullets counsel color-theme-modern color-theme auto-complete ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -244,8 +244,6 @@
 (setq web-mode-enable-auto-closing t)
 (setq web-mode-enable-auto-quoting t))
 
-
-
 ;; misceleneaous
 (global-hl-line-mode t)
 
@@ -264,6 +262,10 @@
 (global-auto-revert-mode 1)
 (setq auto-revert-verbose nil)
 (global-set-key (kbd "<f5>") 'revert-buffer)
+
+(global-set-key (kbd "\e\el")
+		(lambda () (interactive) (find-file "~/orgfiles/links.org")))
+
 
 					; mark and edit all copies of the marked region simultaniously. 
 (use-package iedit
