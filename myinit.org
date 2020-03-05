@@ -10,6 +10,7 @@
 (tool-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-set-key (kbd "<f5>") 'revert-buffer)
+(setq ring-bell-function 'ignore)
 #+END_SRC
 
 * try
@@ -49,7 +50,7 @@
       :config
       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
     (custom-set-variables
-     '(org-directory "~/Sync/orgfiles")
+     '(org-directory "~/orgfiles")
      '(org-default-notes-file (concat org-directory "/notes.org"))
      '(org-export-html-postamble nil)
      '(org-hide-leading-stars t)
@@ -74,24 +75,24 @@
 
     (global-set-key (kbd "C-c c") 'org-capture)
 
-    (setq org-agenda-files (list "~/Sync/orgfiles/gcal.org"
-                                 "~/Sync/orgfiles/soe-cal.org"
-                                 "~/Sync/orgfiles/i.org"
-                                 "~/Sync/orgfiles/schedule.org"))
+    (setq org-agenda-files (list "~/orgfiles/gcal.org"
+                                 "~/orgfiles/soe-cal.org"
+                                 "~/orgfiles/i.org"
+                                 "~/orgfiles/schedule.org"))
     (setq org-capture-templates
-          '(("a" "Appointment" entry (file  "~/Sync/orgfiles/gcal.org" )
+          '(("a" "Appointment" entry (file  "~/orgfiles/gcal.org" )
              "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
-            ("l" "Link" entry (file+headline "~/Sync/orgfiles/links.org" "Links")
+            ("l" "Link" entry (file+headline "~/orgfiles/links.org" "Links")
              "* %? %^L %^g \n%T" :prepend t)
-            ("b" "Blog idea" entry (file+headline "~/Sync/orgfiles/i.org" "Blog Topics:")
+            ("b" "Blog idea" entry (file+headline "~/orgfiles/i.org" "Blog Topics:")
              "* %?\n%T" :prepend t)
-            ("t" "To Do Item" entry (file+headline "~/Sync/orgfiles/i.org" "To Do and Notes")
+            ("t" "To Do Item" entry (file+headline "~/orgfiles/i.org" "To Do and Notes")
              "* TODO %?\n%u" :prepend t)
-            ("m" "Mail To Do" entry (file+headline "~/Sync/orgfiles/i.org" "To Do and Notes")
+            ("m" "Mail To Do" entry (file+headline "~/orgfiles/i.org" "To Do and Notes")
              "* TODO %a\n %?" :prepend t)
-            ("g" "GMail To Do" entry (file+headline "~/Sync/orgfiles/i.org" "To Do and Notes")
+            ("g" "GMail To Do" entry (file+headline "~/orgfiles/i.org" "To Do and Notes")
              "* TODO %^L\n %?" :prepend t)
-            ("n" "Note" entry (file+headline "~/Sync/orgfiles/i.org" "Notes")
+            ("n" "Note" entry (file+headline "~/orgfiles/i.org" "Notes")
              "* %u %? " :prepend t)
             ))
   
@@ -264,40 +265,44 @@
 * Themes and modeline
   #+BEGIN_SRC emacs-lisp 
 
-    (use-package color-theme-modern
-      :ensure t)
-    (use-package zenburn-theme
-      :ensure t
-    
-      )
+    ;;     (use-package color-theme-modern
+    ;;       :ensure t)
+    ;;     (use-package zenburn-theme
+    ;;       :ensure t
 
-        (use-package base16-theme
-        :ensure t
-        )
-        (use-package moe-theme
-        :ensure t)
+    ;;       )
+
+    ;;         (use-package base16-theme
+    ;;         :ensure t
+    ;;         )
+    ;;         (use-package moe-theme
+    ;;         :ensure t)
 
 
-        (use-package alect-themes
-        :ensure t)
+    ;;         (use-package alect-themes
+    ;;         :ensure t)
 
-    (use-package zerodark-theme
-        :ensure t)
+    ;;     (use-package zerodark-theme
+    ;;         :ensure t)
 
-    (use-package faff-theme
-      :ensure t)
-    (use-package poet-theme
-      :ensure t)
-    (use-package tao-theme
-      :ensure t)
-    (use-package doom-themes
-      :ensure t)
-    (use-package doom-modeline
-      :ensure t)
-(require 'doom-modeline)
-(doom-modeline-init)
-;(load-theme 'faff t)
-(load-theme 'faff t)
+    ;;     (use-package faff-theme
+    ;;       :ensure t)
+    ;;     (use-package poet-theme
+    ;;       :ensure t)
+    ;;     (use-package tao-theme
+    ;;       :ensure t)
+    ;;     (use-package doom-themes
+    ;;       :ensure t)
+    ;;     (use-package doom-modeline
+    ;;       :ensure t)
+    ;; (require 'doom-modeline)
+    ;; (doom-modeline-init)
+    ;;
+    ;;(load-theme 'faff t)
+    ;;(load-theme 'faff t)
+    ;; (load-theme 'emacs-21)
+    ;;(load-theme 'adwaita)
+    (load-theme 'manoj-dark t)
   #+END_SRC
 
 
@@ -459,20 +464,83 @@
   : narrow-or-widen-dwim
 
 * Web Mode
+
 #+BEGIN_SRC emacs-lisp
-    (use-package web-mode
-      :ensure t
-      :config
-	   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-	   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
-	   (setq web-mode-engines-alist
-		 '(("django"    . "\\.html\\'")))
-	   (setq web-mode-ac-sources-alist
-	   '(("css" . (ac-source-css-property))
-	   ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
-           ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
-  (setq web-mode-enable-auto-closing t))
-  (setq web-mode-enable-auto-quoting t) ; this fixes the quote problem I mentioned
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-ins
+tall
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+(setq company-tooltip-align-annotations t)
+
+  (use-package web-mode
+    :ensure t
+    :mode (("\\.html?\\'" . web-mode)
+           ("\\.tsx\\'" . web-mode)
+           ("\\.jsx\\'" . web-mode))
+    :config
+    (setq web-mode-markup-indent-offset 2
+          web-mode-css-indent-offset 2
+          web-mode-code-indent-offset 2
+          web-mode-block-padding 2
+          web-mode-comment-style 2
+ 
+          web-mode-enable-css-colorization t
+          web-mode-enable-auto-pairing t
+          web-mode-enable-comment-keywords t
+          web-mode-enable-current-element-highlight t
+          web-mode-enable-auto-indentation nil
+          web-mode-enable-auto-quoting nil
+          )
+
+
+    (add-hook 'web-mode-hook
+              (lambda ()
+                (when (string-equal "tsx" (file-name-extension buffer-file-name))
+                  (setup-tide-mode))))
+    ;; enable typescript-tslint checker
+    (flycheck-add-mode 'typescript-tslint 'web-mode)
+    (setq web-mode-enable-auto-closing t))
+
+    ;;   (use-package web-mode
+    ;;     :ensure t
+    ;;     :config
+    ;; 	   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+    ;; 	   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+    ;; 	   (setq web-mode-engines-alist
+    ;; 		 '(("django"    . "\\.html\\'")))
+    ;; 	   (setq web-mode-ac-sources-alist
+    ;; 	   '(("css" . (ac-source-css-property))
+    ;; 	   ("vue" . (ac-source-words-in-buffer ac-source-abbrev))
+    ;;          ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+    ;; (setq web-mode-enable-auto-closing t))
+    (setq web-mode-enable-auto-quoting t)
+
+(use-package typescript-mode
+  :ensure t
+  :config
+  (setq typescript-indent-level 2)
+  (add-hook 'typescript-mode #'subword-mode))
+ 
+(use-package tide
+  :init
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)))
+ 
+(use-package css-mode
+  :config
+(setq css-indent-offset 2))
 
 
 #+END_SRC
@@ -491,68 +559,72 @@
 #+END_SRC
 * Javascript
 #+BEGIN_SRC emacs-lisp
-(use-package js2-mode
-:ensure t
-:ensure ac-js2
-:init
-(progn
-(add-hook 'js-mode-hook 'js2-minor-mode)
-(add-hook 'js2-mode-hook 'ac-js2-mode)
-))
+  (use-package js2-mode
+  :ensure t
+  :ensure ac-js2
+  :init
+  (progn
+  (add-hook 'js-mode-hook 'js2-minor-mode)
+  (add-hook 'js2-mode-hook 'ac-js2-mode)
+  ))
 
-(use-package js2-refactor
-:ensure t
-:config 
-(progn
-(js2r-add-keybindings-with-prefix "C-c C-m")
-;; eg. extract function with `C-c C-m ef`.
-(add-hook 'js2-mode-hook #'js2-refactor-mode)))
-(use-package tern
-:ensure tern
-:ensure tern-auto-complete
-:config
-(progn
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
-(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-;;(tern-ac-setup)
-))
+  (use-package js2-refactor
+  :ensure t
+  :config 
+  (progn
+  (js2r-add-keybindings-with-prefix "C-c C-m")
+  ;; eg. extract function with `C-c C-m ef`.
+  (add-hook 'js2-mode-hook #'js2-refactor-mode)))
 
-;;(use-package jade
-;;:ensure t
-;;)
+  ;; (use-package tern
+  ;; :ensure tern
+  ;; :ensure tern-auto-complete
+  ;; :config
+  ;; (progn
+  ;; (add-hook 'js-mode-hook (lambda () (tern-mode t)))
+  ;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+  ;; (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+  ;; ;;(tern-ac-setup)
+  ;; ))
 
-;; use web-mode for .jsx files
-(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+  ;;(use-package jade
+  ;;:ensure t
+  ;;)
+
+  ;; use web-mode for .jsx files
+  (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 
 
-;; turn on flychecking globally
-(add-hook 'after-init-hook #'global-flycheck-mode)
+  ;; turn on flychecking globally
+  (add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; disable jshint since we prefer eslint checking
-(setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(javascript-jshint)))
+  ;; disable jshint since we prefer eslint checking
+  (setq-default flycheck-disabled-checkers
+    (append flycheck-disabled-checkers
+      '(javascript-jshint)))
 
-;; use eslint with web-mode for jsx files
-(flycheck-add-mode 'javascript-eslint 'web-mode)
+  ;; use eslint with web-mode for jsx files
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
 
-;; customize flycheck temp file prefix
-(setq-default flycheck-temp-prefix ".flycheck")
+  ;; customize flycheck temp file prefix
+  (setq-default flycheck-temp-prefix ".flycheck")
 
-;; disable json-jsonlist checking for json files
-(setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(json-jsonlist)))
+  ;; disable json-jsonlist checking for json files
+  (setq-default flycheck-disabled-checkers
+    (append flycheck-disabled-checkers
+      '(json-jsonlist)))
 
-;; adjust indents for web-mode to 2 spaces
-(defun my-web-mode-hook ()
-  "Hooks for Web mode. Adjust indents"
-  ;;; http://web-mode.org/
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2))
-(add-hook 'web-mode-hook  'my-web-mode-hook)
+  ;; adjust indents for web-mode to 2 spaces
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode. Adjust indents"
+    ;;; http://web-mode.org/
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2))
+  (add-hook 'web-mode-hook  'my-web-mode-hook)
+
+
+
 #+END_SRC 
 
 * DIRED
@@ -796,8 +868,8 @@
        (if (file-readable-p f)
            (load-file f)))
 
-     (load-if-exists "~/Sync/shared/mu4econfig.el")
-     (load-if-exists "~/Sync/shared/not-for-github.el")
+     (load-if-exists "~/shared/mu4econfig.el")
+     (load-if-exists "~/shared/not-for-github.el")
 
    #+END_SRC
 
@@ -825,7 +897,7 @@
 * Elfeed
 #+BEGIN_SRC emacs-lisp :tangle no
 
-    (setq elfeed-db-directory "~/Sync/shared/elfeeddb")
+    (setq elfeed-db-directory "~/shared/elfeeddb")
 
 
     (defun elfeed-mark-all-as-read ()
@@ -879,7 +951,7 @@
       :ensure t
       :config
       (elfeed-org)
-      (setq rmh-elfeed-org-files (list "~/Sync/shared/elfeed.org")))
+      (setq rmh-elfeed-org-files (list "~/shared/elfeed.org")))
 
 
 
@@ -1148,7 +1220,7 @@
 
 (defun z/load-iorg ()
 (interactive )
-(find-file "~/Sync/orgfiles/i.org"))
+(find-file "~/orgfiles/i.org"))
 
 ;; set up my own map
 (define-prefix-command 'z-map)
@@ -1170,16 +1242,15 @@
 (define-key z-map (kbd "*") 'calc)
 
 
-  (setq user-full-name "Mike Zamansky"
-                          user-mail-address "mz631@hunter.cuny.edu")
+
   ;;--------------------------------------------------------------------------
 
 
   (global-set-key (kbd "\e\ei")
-                  (lambda () (interactive) (find-file "~/Sync/orgfiles/i.org")))
+                  (lambda () (interactive) (find-file "~/orgfiles/i.org")))
 
   (global-set-key (kbd "\e\el")
-                  (lambda () (interactive) (find-file "~/Sync/orgfiles/links.org")))
+                  (lambda () (interactive) (find-file "~/orgfiles/links.org")))
 
   (global-set-key (kbd "\e\ec")
                   (lambda () (interactive) (find-file "~/.emacs.d/myinit.org")))
@@ -1324,9 +1395,9 @@
 
 
 #+BEGIN_SRC emacs-lisp
-(setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "firefox")
-
+;;(setq browse-url-browser-function 'browse-url-generic
+;;      browse-url-generic-program "firefox")
+(setq browse-url-browser-function 'browse-url-default-macosx-browser)
 (setq auto-window-vscroll nil)
 
 #+END_SRC
@@ -1423,3 +1494,23 @@
 
 #+END_SRC
 
+* Text highlight
+
+#+BEGIN_SRC 
+;;(set-face-attribute 'region nil :background "#2352350" :foreground "#ffffff")
+
+(add-hook 'before-save-hook 'tide-format-before-save)
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+(defun duplicate-line()
+  (interactive)
+  (move-beginning-of-line 1)
+  (kill-line)
+  (yank)
+  (open-line 1)
+  (next-line 1)
+  (yank)
+)
+(global-set-key (kbd "C-d") 'duplicate-line)
+
+#+END_SRC
